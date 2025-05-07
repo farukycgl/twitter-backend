@@ -29,12 +29,18 @@ public class TweetServiceImpl implements TweetService{
 
     @Override
     public List<Tweet> findByUserId(Long userId) {
-        return tweetRepository.findByUserId(userId);
+
+        List<Tweet> tweets = tweetRepository.findByUserId(userId);
+
+        if(tweets.isEmpty()){
+            throw new TweetNotFoundException(userId + " id'li kullanıcı bulunamadı.");
+        }
+
+        return tweets;
     }
 
     @Override
     public Tweet findById(Long id) {
-
         return tweetRepository
                 .findById(id)
                 .orElseThrow(()-> new TweetNotFoundException(id + " id'li tweet bulunamadı."));

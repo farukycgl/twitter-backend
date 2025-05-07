@@ -11,8 +11,8 @@ import java.time.LocalDateTime;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler
-    public ResponseEntity<ErrorResponse> handleException(TwitterException exception){
+    @ExceptionHandler(TwitterException.class)
+    public ResponseEntity<ErrorResponse> handleTwitterException(TwitterException exception){
 
         ErrorResponse errorResponse = new ErrorResponse(
                 exception.getMessage(),
@@ -24,8 +24,8 @@ public class GlobalExceptionHandler {
     }
 
     // response for 500
-    @ExceptionHandler
-    public ResponseEntity<ErrorResponse> handleException(Exception exception){
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> handleGeneralException(Exception exception){
 
         ErrorResponse errorResponse = new ErrorResponse(
                 exception.getMessage(),
