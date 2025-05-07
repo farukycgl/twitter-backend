@@ -1,0 +1,68 @@
+package com.tryst.twitter_backend.service;
+
+import com.tryst.twitter_backend.entity.Tweet;
+import com.tryst.twitter_backend.exceptions.TweetNotFoundException;
+import com.tryst.twitter_backend.exceptions.TweetOwnerException;
+import com.tryst.twitter_backend.repository.TweetRepository;
+import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@AllArgsConstructor
+@Service
+public class TweetServiceImpl implements TweetService{
+
+    @Autowired
+    private final TweetRepository tweetRepository;
+
+    @Override
+    public Tweet create(Tweet tweet) {
+
+        if(tweet.getUser() == null){
+            throw new IllegalArgumentException("Tweet'in bir kullanıcısı olmalıdır");
+        }
+
+        return tweetRepository.save(tweet);
+    }
+
+    @Override
+    public List<Tweet> findByUserId(Long userId) {
+        return tweetRepository.findByUserId(userId);
+    }
+
+    @Override
+    public Tweet findById(Long id) {
+
+        return tweetRepository
+                .findById(id)
+                .orElseThrow(()-> new TweetNotFoundException(id + " id'li tweet bulunamadı."));
+    }
+
+    @Override
+    public Tweet update(Long id, Tweet tweet) {
+
+        Tweet tweetToUpdate = tweetRepository.findById(id)
+                .orElseThrow(()-> new TweetNotFoundException(id + " id'li tweet bulunamadı."));
+
+        if(tweet.getContent() != null)
+            tweetToUpdate.setContent(tweet.getContent());
+
+        return tweetRepository.save(tweetToUpdate);
+    }
+
+    @Override
+    public void delete(Long id, Long userId) {
+
+        Tweet existingTweet = tweetRepository
+                .findById(id)
+                        .orElseThrow(()-> new TweetNotFoundException(id + " id'li tweet bulunamadı."));
+
+        if(!existingTweet.getUser().getId().equals(userId)){
+            throw new TweetOwnerException("Bu tweeti silme yetkiniz yok.");
+        }
+
+        tweetRepository.deleteById(id);
+    }
+}
