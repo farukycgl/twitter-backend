@@ -78,7 +78,7 @@ public class TweetServiceImpl implements TweetService{
 
         Tweet existingTweet = tweetRepository
                 .findById(id)
-                        .orElseThrow(()-> new TweetNotFoundException(id + " id'li tweet bulunamadı."));
+                .orElseThrow(()-> new TweetNotFoundException(id + " id'li tweet bulunamadı."));
 
         if(!existingTweet.getUser().getId().equals(userId)){
             throw new TweetOwnerException("Bu tweeti silme yetkiniz yok.");
