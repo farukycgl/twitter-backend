@@ -7,6 +7,7 @@ import java.util.List;
 public interface TweetService {
 
     Tweet create(Tweet tweet);
+    List<Tweet> findAllTweets();
     List<Tweet> findByUserId(Long id);
     Tweet findById(Long id);
     Tweet update(Long id, Tweet tweet);

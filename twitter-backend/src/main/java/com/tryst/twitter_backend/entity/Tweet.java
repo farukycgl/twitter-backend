@@ -1,5 +1,7 @@
 package com.tryst.twitter_backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -36,10 +38,12 @@ public class Tweet {
     private LocalDateTime updatedAt;
 
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JsonBackReference
     @JoinColumn(name = "user_id")
     private User user;
 
     @OneToMany(mappedBy = "tweet", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Comment> comments;
 
     @OneToMany(mappedBy = "tweet", cascade = CascadeType.ALL)
