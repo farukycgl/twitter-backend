@@ -27,12 +27,12 @@ public class TweetController {
         return tweetService.create(tweet);
     }
 
-    @GetMapping("/{id}")
-    public List<Tweet> getByUserId(@Positive @PathVariable("id") Long id){
-        return tweetService.findByUserId(id);
+    @GetMapping("/user/{userId}")
+    public List<Tweet> getByUserId(@Positive @PathVariable("id") Long userId){
+        return tweetService.findByUserId(userId);
     }
 
-    @GetMapping("/user/{userId}")
+    @GetMapping("/{id}")
     public Tweet getById(@Positive @PathVariable Long id){
         return tweetService.findById(id);
     }

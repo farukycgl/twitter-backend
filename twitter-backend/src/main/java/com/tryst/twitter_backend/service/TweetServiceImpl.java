@@ -1,9 +1,11 @@
 package com.tryst.twitter_backend.service;
 
 import com.tryst.twitter_backend.entity.Tweet;
+import com.tryst.twitter_backend.entity.User;
 import com.tryst.twitter_backend.exceptions.TweetNotFoundException;
 import com.tryst.twitter_backend.exceptions.TweetOwnerException;
 import com.tryst.twitter_backend.repository.TweetRepository;
+import com.tryst.twitter_backend.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,13 +18,20 @@ public class TweetServiceImpl implements TweetService{
 
     @Autowired
     private final TweetRepository tweetRepository;
+    @Autowired
+    private final UserRepository userRepository;
 
     @Override
     public Tweet create(Tweet tweet) {
 
         if(tweet.getUser() == null){
-            throw new IllegalArgumentException("Tweet'in bir kullanıcısı olmalıdır");
+            throw new TweetOwnerException("Tweet'in bir kullanıcısı olmalıdır");
         }
+
+        User user = userRepository.findById(tweet.getUser().getId())
+                .orElseThrow(()-> new TweetOwnerException("Geçersiz kullanıcı!"));
+
+        tweet.setUser(user);
 
         return tweetRepository.save(tweet);
     }
