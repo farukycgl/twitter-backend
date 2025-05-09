@@ -1,5 +1,8 @@
 package com.tryst.twitter_backend.service;
 
+import com.tryst.twitter_backend.dto.TweetRequestDto;
+import com.tryst.twitter_backend.dto.TweetResponseDto;
+import com.tryst.twitter_backend.dto.UserResponseDto;
 import com.tryst.twitter_backend.entity.Tweet;
 import com.tryst.twitter_backend.entity.User;
 import com.tryst.twitter_backend.exceptions.TweetNotFoundException;
@@ -23,18 +26,22 @@ public class TweetServiceImpl implements TweetService{
     private final UserRepository userRepository;
 
     @Override
-    public Tweet create(Tweet tweet) {
+    public TweetResponseDto create(TweetRequestDto tweetRequestDto) {
 
-        if(tweet.getUser() == null){
+        if(tweetRequestDto.userId() == null ){
             throw new TweetOwnerException("Tweet'in bir kullanıcısı olmalıdır");
         }
 
-        User user = userRepository.findById(tweet.getUser().getId())
+        User user = userRepository.findById(tweetRequestDto.userId())
                 .orElseThrow(()-> new TweetOwnerException("Geçersiz kullanıcı!"));
 
+        Tweet tweet = new Tweet();
+        tweet.setContent(tweetRequestDto.content());
         tweet.setUser(user);
 
-        return tweetRepository.save(tweet);
+        Tweet savedTweet = tweetRepository.save(tweet);
+        UserResponseDto userResponseDto = new UserResponseDto(user.getId(), user.getUserName(), user.getEmail());
+        return new TweetResponseDto(savedTweet.getId(), savedTweet.getContent(), userResponseDto);
     }
 
     @GetMapping
@@ -62,15 +69,22 @@ public class TweetServiceImpl implements TweetService{
     }
 
     @Override
-    public Tweet update(Long id, Tweet tweet) {
+    public TweetResponseDto update(Long id, TweetRequestDto tweetRequestDto) {
 
-        Tweet tweetToUpdate = tweetRepository.findById(id)
+        Tweet tweet = tweetRepository.findById(id)
                 .orElseThrow(()-> new TweetNotFoundException(id + " id'li tweet bulunamadı."));
 
-        if(tweet.getContent() != null)
-            tweetToUpdate.setContent(tweet.getContent());
+        tweet.setContent(tweetRequestDto.content());
 
-        return tweetRepository.save(tweetToUpdate);
+        if(tweetRequestDto.userId() != null) {
+            User user = userRepository.findById(tweetRequestDto.userId()).orElseThrow(() -> new TweetOwnerException("Tweeti güncelleme yetkiniz yok!"));
+            tweet.setUser(user);
+        }
+
+        Tweet updatedTweet = tweetRepository.save(tweet);
+
+        return new TweetResponseDto(updatedTweet.getId(), updatedTweet.getContent(),
+                new UserResponseDto(tweet.getUser().getId(), tweet.getUser().getUserName(), tweet.getUser().getEmail()));
     }
 
     @Override
