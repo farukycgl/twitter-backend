@@ -1,5 +1,6 @@
 package com.tryst.twitter_backend.controller;
 
+import com.tryst.twitter_backend.dto.UserResponseDto;
 import com.tryst.twitter_backend.entity.User;
 import com.tryst.twitter_backend.service.UserService;
 import jakarta.validation.constraints.Positive;
@@ -23,18 +24,27 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public User createUser(@Validated @RequestBody User user){
-        return userService.create(user);
+    public UserResponseDto createUser(@Validated @RequestBody UserResponseDto userResponseDto){
+        User user = userService.create(userResponseDto);
+        return new UserResponseDto(user.getId(), user.getUserName(), user.getEmail());
     }
 
     @GetMapping
-    public List<User> getAllUser(){
-        return userService.getAll();
+    public List<UserResponseDto> getAllUser(){
+        return userService.getAll()
+                .stream()
+                .map((user) -> new UserResponseDto(
+                        user.getId(),
+                        user.getUserName(),
+                        user.getEmail()
+                ))
+                .toList();
     }
 
     @GetMapping("/{id}")
-    public User getByUserId(@Positive @PathVariable("id") Long id){
-        return userService.getById(id);
+    public UserResponseDto getByUserId(@Positive @PathVariable("id") Long id){
+        User user = userService.getById(id);
+        return new UserResponseDto(user.getId(), user.getUserName(), user.getEmail());
     }
 
     @DeleteMapping("/{id}")

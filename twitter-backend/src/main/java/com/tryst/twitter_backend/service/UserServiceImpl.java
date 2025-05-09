@@ -1,6 +1,7 @@
 package com.tryst.twitter_backend.service;
 
 
+import com.tryst.twitter_backend.dto.UserResponseDto;
 import com.tryst.twitter_backend.entity.User;
 import com.tryst.twitter_backend.exceptions.UserNotFoundException;
 import com.tryst.twitter_backend.repository.UserRepository;
@@ -18,7 +19,10 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
-    public User create(User user) {
+    public User create(UserResponseDto userResponseDto) {
+        User user = new User();
+        user.setUserName(userResponseDto.userName());
+        user.setEmail(userResponseDto.email());
         return userRepository.save(user);
     }
 

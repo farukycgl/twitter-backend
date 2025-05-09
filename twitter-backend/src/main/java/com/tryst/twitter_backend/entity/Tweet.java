@@ -39,7 +39,6 @@ public class Tweet {
     private LocalDateTime updatedAt;
 
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    @JsonIgnoreProperties("tweets")
     @JoinColumn(name = "user_id")
     private User user;
 
