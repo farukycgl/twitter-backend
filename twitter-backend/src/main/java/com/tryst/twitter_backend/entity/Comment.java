@@ -44,4 +44,12 @@ public class Comment {
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "tweet_id")
     private Tweet tweet;
+
+    public void addUser(User user){
+        this.user = user;
+
+        if(user.getComments() != null && !user.getComments().contains(this)){
+            user.getComments().add(this);
+        }
+    }
 }

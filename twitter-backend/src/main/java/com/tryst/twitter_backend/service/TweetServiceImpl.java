@@ -28,15 +28,15 @@ public class TweetServiceImpl implements TweetService{
     @Override
     public TweetResponseDto create(TweetRequestDto tweetRequestDto) {
 
-        if(tweetRequestDto.userId() == null ){
+        if(tweetRequestDto.getUserId() == null ){
             throw new TweetOwnerException("Tweet'in bir kullanıcısı olmalıdır");
         }
 
-        User user = userRepository.findById(tweetRequestDto.userId())
+        User user = userRepository.findById(tweetRequestDto.getUserId())
                 .orElseThrow(()-> new TweetOwnerException("Geçersiz kullanıcı!"));
 
         Tweet tweet = new Tweet();
-        tweet.setContent(tweetRequestDto.content());
+        tweet.setContent(tweetRequestDto.getContent());
         tweet.setUser(user);
 
         Tweet savedTweet = tweetRepository.save(tweet);
@@ -74,10 +74,10 @@ public class TweetServiceImpl implements TweetService{
         Tweet tweet = tweetRepository.findById(id)
                 .orElseThrow(()-> new TweetNotFoundException(id + " id'li tweet bulunamadı."));
 
-        tweet.setContent(tweetRequestDto.content());
+        tweet.setContent(tweetRequestDto.getContent());
 
-        if(tweetRequestDto.userId() != null) {
-            User user = userRepository.findById(tweetRequestDto.userId()).orElseThrow(() -> new TweetOwnerException("Tweeti güncelleme yetkiniz yok!"));
+        if(tweetRequestDto.getUserId() != null) {
+            User user = userRepository.findById(tweetRequestDto.getUserId()).orElseThrow(() -> new TweetOwnerException("Tweeti güncelleme yetkiniz yok!"));
             tweet.setUser(user);
         }
 

@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @AllArgsConstructor
 @Service
@@ -26,6 +27,12 @@ public class CommentServiceImpl implements CommentService{
     private final TweetRepository tweetRepository;
     @Autowired
     private final UserRepository userRepository;
+
+
+    @Override
+    public List<Comment> findAllComment() {
+        return commentRepository.findAll();
+    }
 
     @Override
     public Comment create(Long tweetId, Comment comment, Long userId) {

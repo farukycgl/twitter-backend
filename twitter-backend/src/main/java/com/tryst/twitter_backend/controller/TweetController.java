@@ -18,7 +18,7 @@ import java.util.List;
 @Slf4j
 @AllArgsConstructor
 @RestController
-@RequestMapping("/tryst/twitter/api/tweet")
+@RequestMapping("/tweets")
 public class TweetController {
 
     @Autowired
@@ -41,7 +41,7 @@ public class TweetController {
     }
 
     @GetMapping("/user/{userId}")
-    public List<TweetResponseDto> getByUserId(@Positive @PathVariable("userId") Long userId){
+    public List<TweetResponseDto> getTweetsByUserId(@Positive @PathVariable("userId") Long userId){
         return tweetService.findByUserId(userId)
                 .stream()
                 .map((tweet -> new TweetResponseDto(tweet.getId(), tweet.getContent(),

@@ -1,8 +1,5 @@
 package com.tryst.twitter_backend.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -12,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor
@@ -50,6 +48,25 @@ public class Tweet {
 
     @OneToMany(mappedBy = "tweet", cascade = CascadeType.ALL)
     private List<Retweet> retweets;
+
+    public void addUser(User user){
+        this.user = user;
+
+        if(user.getTweets() != null && !user.getTweets().contains(this)){
+            user.getTweets().add(this);
+        }
+    }
+
+    public void addComment(Comment comment){
+        if(this.comments == null){
+            this.comments = new ArrayList<>();
+        }
+        this.comments.add(comment);
+        comment.setTweet(this);
+    }
+
+
+
 
 }
 

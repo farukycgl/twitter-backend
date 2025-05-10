@@ -16,7 +16,7 @@ import java.util.List;
 @Slf4j
 @AllArgsConstructor
 @RestController
-@RequestMapping("/tryst/twitter/api/user")
+@RequestMapping("/users")
 public class UserController {
 
     @Autowired

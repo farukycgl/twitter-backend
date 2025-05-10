@@ -1,4 +1,12 @@
 package com.tryst.twitter_backend.dto;
 
-public record TweetRequestDto(String content, Long userId) {
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
+@Data
+@AllArgsConstructor
+public class TweetRequestDto {
+
+    private String content;
+    private Long userId;
 }
