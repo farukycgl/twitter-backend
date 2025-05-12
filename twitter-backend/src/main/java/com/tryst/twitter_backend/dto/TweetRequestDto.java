@@ -8,5 +8,4 @@ import lombok.Data;
 public class TweetRequestDto {
 
     private String content;
-    private Long userId;
 }

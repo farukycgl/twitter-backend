@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 @Data
 public class RegisterRequestDto {
 
+    @Size(max = 150)
+    private String fullName;
 
     @NotNull
     @NotEmpty

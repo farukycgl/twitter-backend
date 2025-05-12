@@ -17,12 +17,13 @@ public class RegisterServiceImpl implements RegisterService {
     private final PasswordEncoder passwordEncoder;
 
 
-    public User register(String email, String password){
+    public User register(String fullName ,String email, String password){
 
         // ilk başta password ü şifrele
         String encodedPassword = passwordEncoder.encode(password);
 
         User user = new User();
+        user.setFullName(fullName);
         user.setEmail(email);
         user.setPassword(encodedPassword);
 

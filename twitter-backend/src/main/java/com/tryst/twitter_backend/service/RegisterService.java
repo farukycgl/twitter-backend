@@ -4,5 +4,5 @@ import com.tryst.twitter_backend.entity.User;
 
 public interface RegisterService {
 
-    User register(String email, String password);
+    User register(String fullName ,String email, String password);
 }

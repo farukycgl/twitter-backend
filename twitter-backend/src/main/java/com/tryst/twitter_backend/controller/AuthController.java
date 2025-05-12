@@ -19,7 +19,7 @@ public class AuthController {
     @PostMapping("/register")
     public RegisterResponseDto register(@RequestBody RegisterRequestDto registerRequestDto){
 
-        registerService.register(registerRequestDto.getEmail(), registerRequestDto.getPassword());
+        registerService.register(registerRequestDto.getFullName(), registerRequestDto.getEmail(), registerRequestDto.getPassword());
         return new RegisterResponseDto(registerRequestDto.getEmail(), "Kullanıcı, başarılı bir şekilde oluşturuldu.");
     }
 
