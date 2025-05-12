@@ -26,7 +26,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.CREATED)
     public UserResponseDto createUser(@Validated @RequestBody UserResponseDto userResponseDto){
         User user = userService.create(userResponseDto);
-        return new UserResponseDto(user.getId(), user.getUserName(), user.getEmail());
+        return new UserResponseDto(user.getId(), user.getFullName(), user.getEmail());
     }
 
     @GetMapping
@@ -35,7 +35,7 @@ public class UserController {
                 .stream()
                 .map((user) -> new UserResponseDto(
                         user.getId(),
-                        user.getUserName(),
+                        user.getFullName(),
                         user.getEmail()
                 ))
                 .toList();
@@ -44,7 +44,7 @@ public class UserController {
     @GetMapping("/{id}")
     public UserResponseDto getByUserId(@Positive @PathVariable("id") Long id){
         User user = userService.getById(id);
-        return new UserResponseDto(user.getId(), user.getUserName(), user.getEmail());
+        return new UserResponseDto(user.getId(), user.getFullName(), user.getEmail());
     }
 
     @DeleteMapping("/{id}")

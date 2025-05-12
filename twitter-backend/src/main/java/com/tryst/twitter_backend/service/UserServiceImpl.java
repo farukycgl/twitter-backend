@@ -20,7 +20,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User create(UserResponseDto userResponseDto) {
         User user = new User();
-        user.setUserName(userResponseDto.userName());
+        user.setFullName(userResponseDto.userName());
         user.setEmail(userResponseDto.email());
         return userRepository.save(user);
     }

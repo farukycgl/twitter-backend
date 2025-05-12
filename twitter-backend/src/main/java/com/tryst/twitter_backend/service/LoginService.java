@@ -1,6 +1,6 @@
 package com.tryst.twitter_backend.service;
 
-import com.tryst.twitter_backend.repository.ApplicationUserRepository;
+import com.tryst.twitter_backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -10,18 +10,19 @@ import org.springframework.stereotype.Service;
 @Service
 public class LoginService implements UserDetailsService {
 
-    private final ApplicationUserRepository applicationUserRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public LoginService(ApplicationUserRepository applicationUserRepository) {
-        this.applicationUserRepository = applicationUserRepository;
+    public LoginService(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        return applicationUserRepository.findUserByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Kullanıcı adı hatalı."));
+        return userRepository
+                .findUserByEmail(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Bu email ile kullanıcı bulunamadı!" + username));
 
     }
 }

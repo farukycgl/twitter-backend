@@ -40,7 +40,7 @@ public class TweetServiceImpl implements TweetService{
         tweet.setUser(user);
 
         Tweet savedTweet = tweetRepository.save(tweet);
-        UserResponseDto userResponseDto = new UserResponseDto(user.getId(), user.getUserName(), user.getEmail());
+        UserResponseDto userResponseDto = new UserResponseDto(user.getId(), user.getFullName(), user.getEmail());
         return new TweetResponseDto(savedTweet.getId(), savedTweet.getContent(), userResponseDto);
     }
 
@@ -84,7 +84,7 @@ public class TweetServiceImpl implements TweetService{
         Tweet updatedTweet = tweetRepository.save(tweet);
 
         return new TweetResponseDto(updatedTweet.getId(), updatedTweet.getContent(),
-                new UserResponseDto(tweet.getUser().getId(), tweet.getUser().getUserName(), tweet.getUser().getEmail()));
+                new UserResponseDto(tweet.getUser().getId(), tweet.getUser().getFullName(), tweet.getUser().getEmail()));
     }
 
     @Override

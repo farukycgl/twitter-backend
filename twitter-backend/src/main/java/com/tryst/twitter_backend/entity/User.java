@@ -1,15 +1,14 @@
 package com.tryst.twitter_backend.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 
 @NoArgsConstructor
@@ -17,33 +16,28 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "user", schema = "twitter-backend")
-public class User {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @NotNull
-    @NotEmpty
     @Size(max = 150)
-    @Column(name = "user_name")
-    private String userName;
+    @Column(name = "full_name")
+    private String fullName;
 
-    @Size(max = 30, min = 8)
-    @Column(name = "password")
-    private String password;
-
-    @Size(max = 100)
+    @NotEmpty
+    @NotNull
     @Email
     @Column(name = "email")
     private String email;
 
-    @Column(name = "is_active")
-    private Boolean isActive;
+    @NotEmpty
+    @NotNull
+    @Column(name = "password")
+    private String password;
 
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Tweet> tweets;
@@ -56,4 +50,36 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Retweet> retweets;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of();
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+
 }

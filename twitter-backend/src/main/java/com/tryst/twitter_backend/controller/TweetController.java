@@ -35,7 +35,7 @@ public class TweetController {
         return tweetService.findAllTweets()
                 .stream()
                 .map((tweet)-> new TweetResponseDto(tweet.getId(), tweet.getContent(),
-                                        new UserResponseDto(tweet.getUser().getId(), tweet.getUser().getUserName(), tweet.getUser().getEmail())
+                                        new UserResponseDto(tweet.getUser().getId(), tweet.getUser().getFullName(), tweet.getUser().getEmail())
                 ))
                 .toList();
     }
@@ -45,7 +45,7 @@ public class TweetController {
         return tweetService.findByUserId(userId)
                 .stream()
                 .map((tweet -> new TweetResponseDto(tweet.getId(), tweet.getContent(),
-                                        new UserResponseDto(tweet.getUser().getId(), tweet.getUser().getUserName(), tweet.getUser().getEmail()))
+                                        new UserResponseDto(tweet.getUser().getId(), tweet.getUser().getFullName(), tweet.getUser().getEmail()))
                 ))
                 .toList();
     }
@@ -54,7 +54,7 @@ public class TweetController {
     public TweetResponseDto getById(@Positive @PathVariable Long id){
         Tweet tweet = tweetService.findById(id);
         return new TweetResponseDto(tweet.getId(), tweet.getContent(),
-                new UserResponseDto(tweet.getUser().getId(), tweet.getUser().getUserName(), tweet.getUser().getEmail()));
+                new UserResponseDto(tweet.getUser().getId(), tweet.getUser().getFullName(), tweet.getUser().getEmail()));
     }
 
     @PutMapping("/{id}")

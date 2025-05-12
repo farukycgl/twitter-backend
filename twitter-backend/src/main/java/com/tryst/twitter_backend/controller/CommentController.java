@@ -56,8 +56,8 @@ public class CommentController {
         commentService.create(tweetId, comment, userId);
         return new CommentResponseDto(comment.getContent(),
                 new TweetResponseDto(tweetId, tweet.getContent(),
-                        new UserResponseDto(userId, tweet.getUser().getUserName(), tweet.getUser().getEmail())),
-                new UserResponseDto(userId, user.getUserName(), user.getEmail()));
+                        new UserResponseDto(userId, tweet.getUser().getFullName(), tweet.getUser().getEmail())),
+                new UserResponseDto(userId, user.getFullName(), user.getEmail()));
     }
 
     @PutMapping("/{id}")
