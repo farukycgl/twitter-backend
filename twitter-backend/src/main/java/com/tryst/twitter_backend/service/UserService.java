@@ -7,8 +7,11 @@ import java.util.List;
 
 public interface UserService {
 
-    User create(UserResponseDto userResponseDto);
+    User getByEmail(String email);
+
     List<User> getAll();
+
     User getById(Long id);
+
     void delete(Long id);
 }

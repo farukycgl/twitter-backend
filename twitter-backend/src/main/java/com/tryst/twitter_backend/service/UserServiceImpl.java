@@ -18,11 +18,9 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
-    public User create(UserResponseDto userResponseDto) {
-        User user = new User();
-        user.setFullName(userResponseDto.userName());
-        user.setEmail(userResponseDto.email());
-        return userRepository.save(user);
+    public User getByEmail(String email){
+        return userRepository.findUserByEmail(email)
+                .orElseThrow(()-> new UserNotFoundException("Kullanıcı bulunamadı!"));
     }
 
     @Override

@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -50,6 +51,25 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Retweet> retweets;
+
+
+    public void addTweet(Tweet tweet) {
+        if (this.tweets == null) {
+            this.tweets = new ArrayList<>();
+        }
+
+        this.tweets.add(tweet);
+        tweet.setUser(this);
+    }
+
+    public void addComment(Comment comment){
+        if(this.comments == null){
+            this.comments = new ArrayList<>();
+        }
+
+        this.comments.add(comment);
+        comment.setUser(this);
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

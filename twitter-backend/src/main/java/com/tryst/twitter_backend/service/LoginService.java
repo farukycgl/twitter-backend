@@ -22,7 +22,7 @@ public class LoginService implements UserDetailsService {
 
         return userRepository
                 .findUserByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Bu email ile kullanıcı bulunamadı!" + username));
+                .orElseThrow(() -> new UsernameNotFoundException("Bu email ile kullanıcı bulunamadı: " + username));
 
     }
 }

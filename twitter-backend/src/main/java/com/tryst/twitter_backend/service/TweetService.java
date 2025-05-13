@@ -10,9 +10,14 @@ import java.util.List;
 public interface TweetService {
 
     TweetResponseDto create(TweetRequestDto tweetRequestDto, User authUser);
+
     List<Tweet> findAllTweets();
+
     List<Tweet> findByUserId(Long id);
+
     Tweet findById(Long id);
+
     TweetResponseDto update(Long id, TweetRequestDto tweetRequestDto, User authUser);
+
     void delete(Long id, User authUser);
 }

@@ -49,13 +49,6 @@ public class Tweet {
     @OneToMany(mappedBy = "tweet", cascade = CascadeType.ALL)
     private List<Retweet> retweets;
 
-    public void addUser(User user){
-        this.user = user;
-
-        if(user.getTweets() != null && !user.getTweets().contains(this)){
-            user.getTweets().add(this);
-        }
-    }
 
     public void addComment(Comment comment){
         if(this.comments == null){

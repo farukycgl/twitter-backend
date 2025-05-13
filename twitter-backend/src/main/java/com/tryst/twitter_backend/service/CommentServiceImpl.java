@@ -12,10 +12,13 @@ import com.tryst.twitter_backend.repository.TweetRepository;
 import com.tryst.twitter_backend.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @AllArgsConstructor
 @Service
@@ -28,6 +31,10 @@ public class CommentServiceImpl implements CommentService{
     @Autowired
     private final UserRepository userRepository;
 
+    @Override
+    public Optional<Comment> findById(Long id){
+        return commentRepository.findById(id);
+    }
 
     @Override
     public List<Comment> findAllComment() {
@@ -35,13 +42,16 @@ public class CommentServiceImpl implements CommentService{
     }
 
     @Override
-    public Comment create(Long tweetId, Comment comment, Long userId) {
+    public Comment create(Long tweetId, Comment comment) {
 
-        Tweet tweet = tweetRepository.findById(userId)
-                .orElseThrow(()-> new TweetNotFoundException(userId + " id'li tweet bulunamadı."));
+        Tweet tweet = tweetRepository.findById(tweetId)
+                .orElseThrow(()-> new TweetNotFoundException(tweetId + " id'li tweet bulunamadı."));
 
-        User user = userRepository.findById(tweetId)
-                .orElseThrow(()-> new UserNotFoundException(userId + " id'li kullanıcı bulunamadı."));
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+
+        User user = userRepository.findUserByEmail(email)
+                        .orElseThrow(()-> new UserNotFoundException("Kullanıcı bulunamadı!"));
 
         comment.setTweet(tweet);
         comment.setUser(user);
@@ -64,7 +74,7 @@ public class CommentServiceImpl implements CommentService{
     }
 
     @Override
-    public void delete(Long id, Long userId) {
+    public void delete(Long id) {
 
         Comment comment = commentRepository.findById(id)
                 .orElseThrow(()-> new CommentNotFoundException(id + " id'li yorum bulunamadı"));
@@ -72,8 +82,15 @@ public class CommentServiceImpl implements CommentService{
         Long tweetOwnerId = comment.getTweet().getUser().getId();
         Long commentOwnerId = comment.getUser().getId();
 
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        User user = userRepository.findUserByEmail(email)
+                .orElseThrow(()-> new UserNotFoundException("Kullanıcı bulunamadı!"));
+
+        Long currentUserId = user.getId();
+
         //kullanıcı id si bu iki kişiden birimi?
-        if(!userId.equals(tweetOwnerId) && !userId.equals(commentOwnerId)){
+        if(!currentUserId.equals(tweetOwnerId) && !currentUserId.equals(commentOwnerId)){
             throw new CommentDeletionAuthorizationException("Yorumu silmek için yetkiniz yok!");
         }
 

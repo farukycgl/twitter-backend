@@ -5,8 +5,6 @@ import com.tryst.twitter_backend.dto.JustCommentResponseDto;
 import com.tryst.twitter_backend.dto.TweetResponseDto;
 import com.tryst.twitter_backend.dto.UserResponseDto;
 import com.tryst.twitter_backend.entity.Comment;
-import com.tryst.twitter_backend.entity.Tweet;
-import com.tryst.twitter_backend.entity.User;
 import com.tryst.twitter_backend.service.CommentService;
 import com.tryst.twitter_backend.service.TweetService;
 import com.tryst.twitter_backend.service.UserService;
@@ -17,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @Slf4j
@@ -28,13 +25,10 @@ public class CommentController {
 
     @Autowired
     private final CommentService commentService;
-    @Autowired
-    private final TweetService tweetService;
-    @Autowired
-    private final UserService userService;
+
 
     @GetMapping
-    public List<JustCommentResponseDto> getAllCommentByTweetId(){
+    public List<JustCommentResponseDto> getAllCommentByTweetId() {
 
         return commentService.findAllComment()
                 .stream()
@@ -45,24 +39,19 @@ public class CommentController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CommentResponseDto addComment(@PathVariable Long tweetId,
-                                         @Validated @RequestBody Comment comment,
-                                         @RequestParam Long userId){
+                                         @Validated @RequestBody Comment comment) {
 
-        Tweet tweet = tweetService.findById(tweetId);
-        User user = userService.getById(userId);
+        Comment createdComment = commentService.create(tweetId, comment);
 
-        tweet.addComment(comment);
-
-        commentService.create(tweetId, comment, userId);
         return new CommentResponseDto(comment.getContent(),
-                new TweetResponseDto(tweetId, tweet.getContent(),
-                        new UserResponseDto(userId, tweet.getUser().getFullName(), tweet.getUser().getEmail())),
-                new UserResponseDto(userId, user.getFullName(), user.getEmail()));
+                new TweetResponseDto(tweetId, createdComment.getContent(),
+                        new UserResponseDto(createdComment.getTweet().getUser().getId(), createdComment.getTweet().getUser().getFullName(), createdComment.getTweet().getUser().getEmail())),
+                new UserResponseDto(createdComment.getUser().getId(), createdComment.getUser().getFullName(), createdComment.getUser().getEmail()));
     }
 
     @PutMapping("/{id}")
     public JustCommentResponseDto updateComment(@Positive @PathVariable Long id,
-                                 @Validated @RequestBody Comment comment){
+                                                @Validated @RequestBody Comment comment) {
 
         Comment updatedComment = commentService.update(id, comment);
 
@@ -71,12 +60,9 @@ public class CommentController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteComment(@Positive @PathVariable Long id,
-                              @RequestParam Long userId){
-
-        commentService.delete(id, userId);
+    public void deleteComment(@Positive @PathVariable Long id) {
+        commentService.delete(id);
     }
-
 
 
 }

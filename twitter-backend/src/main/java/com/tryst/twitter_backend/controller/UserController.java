@@ -22,12 +22,6 @@ public class UserController {
     @Autowired
     private final UserService userService;
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public UserResponseDto createUser(@Validated @RequestBody UserResponseDto userResponseDto){
-        User user = userService.create(userResponseDto);
-        return new UserResponseDto(user.getId(), user.getFullName(), user.getEmail());
-    }
 
     @GetMapping
     public List<UserResponseDto> getAllUser(){
