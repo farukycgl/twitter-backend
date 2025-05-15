@@ -6,6 +6,7 @@ import com.tryst.twitter_backend.dto.RegisterResponseDto;
 import com.tryst.twitter_backend.service.RegisterService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @AllArgsConstructor
@@ -17,7 +18,7 @@ public class AuthController {
     private final RegisterService registerService;
 
     @PostMapping("/register")
-    public RegisterResponseDto register(@RequestBody RegisterRequestDto registerRequestDto){
+    public RegisterResponseDto register(@Validated @RequestBody RegisterRequestDto registerRequestDto){
 
         registerService.register(registerRequestDto.getFullName(), registerRequestDto.getEmail(), registerRequestDto.getPassword());
         return new RegisterResponseDto(registerRequestDto.getEmail(), "Kullanıcı, başarılı bir şekilde oluşturuldu.");

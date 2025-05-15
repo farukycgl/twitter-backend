@@ -6,8 +6,6 @@ import com.tryst.twitter_backend.dto.TweetResponseDto;
 import com.tryst.twitter_backend.dto.UserResponseDto;
 import com.tryst.twitter_backend.entity.Comment;
 import com.tryst.twitter_backend.service.CommentService;
-import com.tryst.twitter_backend.service.TweetService;
-import com.tryst.twitter_backend.service.UserService;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
