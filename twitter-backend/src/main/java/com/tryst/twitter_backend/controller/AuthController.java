@@ -3,6 +3,7 @@ package com.tryst.twitter_backend.controller;
 import com.tryst.twitter_backend.dto.RegisterRequestDto;
 import com.tryst.twitter_backend.dto.RegisterResponseDto;
 
+import com.tryst.twitter_backend.entity.User;
 import com.tryst.twitter_backend.service.RegisterService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +19,10 @@ public class AuthController {
     private final RegisterService registerService;
 
     @PostMapping("/register")
-    public RegisterResponseDto register(@Validated @RequestBody RegisterRequestDto registerRequestDto){
+    public User register(@Validated @RequestBody RegisterRequestDto registerRequestDto){
 
-        registerService.register(registerRequestDto.getFullName(), registerRequestDto.getEmail(), registerRequestDto.getPassword());
-        return new RegisterResponseDto(registerRequestDto.getEmail(), "Kullanıcı, başarılı bir şekilde oluşturuldu.");
+        return registerService.register(registerRequestDto.getFullName(), registerRequestDto.getEmail(), registerRequestDto.getPassword());
+
     }
 
 }

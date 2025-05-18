@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -35,20 +36,16 @@ public class RegisterServiceImpl implements RegisterService {
         // password'ü şifrele
         String encodedPassword = passwordEncoder.encode(password);
 
-        Optional<Role> userRole = roleRepository.findRoleByAuthority("USER");
+        Role userRole = roleRepository.findRoleByAuthority("USER").get();
 
-        if(userRole.isEmpty()) {
-            Role role = new Role();
-            role.setAuthority("USER");
-
-            userRole = Optional.of(roleRepository.save(role));
-        }
+        Set<Role> roles = new HashSet<>();
+        roles.add(userRole);
 
         User user = new User();
         user.setFullName(fullName);
         user.setEmail(email);
         user.setPassword(encodedPassword);
-        user.setRoles(Set.of(userRole.get()));
+        user.setRoles(roles);
 
         return userRepository.save(user);
     }

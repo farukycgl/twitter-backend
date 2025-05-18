@@ -53,6 +53,8 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Retweet> retweets;
 
+
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name= "user_role", schema = "twitter-backend",
     joinColumns = {@JoinColumn(name = "user_id")},
     inverseJoinColumns = {@JoinColumn(name = "role_id")})

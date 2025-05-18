@@ -1,6 +1,5 @@
 package com.tryst.twitter_backend.service;
 
-import com.tryst.twitter_backend.dto.UserResponseDto;
 import com.tryst.twitter_backend.entity.User;
 import com.tryst.twitter_backend.exceptions.UserNotFoundException;
 import com.tryst.twitter_backend.repository.UserRepository;
