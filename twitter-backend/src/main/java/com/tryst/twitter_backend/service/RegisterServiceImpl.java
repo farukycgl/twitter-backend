@@ -36,7 +36,8 @@ public class RegisterServiceImpl implements RegisterService {
         // password'ü şifrele
         String encodedPassword = passwordEncoder.encode(password);
 
-        Role userRole = roleRepository.findRoleByAuthority("USER").get();
+        Role userRole = roleRepository.findRoleByAuthority("USER")
+                .orElseThrow(() -> new RuntimeException("USER rolü veritabanında bulunamadı! Lütfen rolü ekleyin."));
 
         Set<Role> roles = new HashSet<>();
         roles.add(userRole);

@@ -42,7 +42,7 @@ public class TweetServiceImpl implements TweetService{
         return new TweetResponseDto(savedTweet.getId(), savedTweet.getContent(), userResponseDto);
     }
 
-    @GetMapping
+    @Override
     public List<Tweet> findAllTweets(){
         return tweetRepository.findAll();
     }
