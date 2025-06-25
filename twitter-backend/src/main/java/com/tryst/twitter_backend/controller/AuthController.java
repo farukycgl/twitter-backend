@@ -17,6 +17,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 @AllArgsConstructor
 @RestController
 @RequestMapping("/auth")
